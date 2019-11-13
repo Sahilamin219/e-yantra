@@ -1,0 +1,162 @@
+/*
+*
+* Function Name: forward_wls
+* Input: node
+* Output: void
+* Logic: Uses white line sensors to go forward by the number of nodes specified
+* Example Call: forward_wls(2); //Goes forward by two nodes
+*
+*/
+void forward_wls(unsigned char node)
+	
+{	//intialising values for updating sensor values
+	unsigned char left_sensor=1, centre_sensor=1, right_sensor=1;
+	//varibles to store values of sensores
+	unsigned char a=0, b=0, c=0;
+	if (node < 0) {
+		printf("reached destination !");
+		stop();
+		exit;
+	}
+	while (node>0) {
+		/*
+		a = left_sensor;
+		b = centre_sensor;
+		c = right_sensor;
+		*/
+		left_sensor = ADC_Conversion(1);
+		centre_sensor = ADC_Conversion(2);
+		right_sensor = ADC_Conversion(3);
+		//printf("%d %d %d\n", a, b, c);
+		//re-assigning values for updating sensor values
+		_delay_ms(500);
+		printf("\n%d %d %d", left_sensor, centre_sensor, right_sensor);
+		_delay_ms(250);
+		//case 1
+		//bot will move forward if left and right track color is not black and centre is black
+		if (left_sensor == 0 && centre_sensor != 0 && right_sensor == 0) {
+			printf("TEST1!");
+			//velocity(250, 250);
+			forward();
+			_delay_ms(150);
+		}
+		//case 2
+		//conditions specified for moving right
+		if (left_sensor == 0 && centre_sensor == 0 && right_sensor != 0) {
+			stop();
+			printf("TEST2!");
+			right_turn_wls();
+			_delay_ms(25); 
+		}
+		//case 3
+		//conditions specified for moving left
+		if (left_sensor != 0 && centre_sensor == 0 && right_sensor ==0) {
+			stop();
+			printf("TEST3!");
+			left_turn_wls();
+			_delay_ms(25);
+		}
+		//case 4
+		if (left_sensor == 0 && centre_sensor != 0 && right_sensor != 0) {
+			stop();
+			printf("TEST4!");
+			//velocity(250, 220);
+			soft_right();
+			_delay_ms(25);
+		}
+		//case 5
+		if (left_sensor != 0 && centre_sensor != 0 && right_sensor == 0) {
+			stop();
+			printf("TEST5!");
+			//velocity(220, 250);
+			soft_left();
+			_delay_ms(25);
+		}
+		//case 6
+		//itrating over number of node given
+		if (left_sensor != 0 && centre_sensor != 0 && right_sensor != 0) {
+			printf("TEST6!");
+			stop();
+			node--;
+			printf("%d", node);
+			if (node == 5) {
+				printf("runnn5!");
+				right_turn_wls();
+				_delay_ms(50);
+			}
+			if (node == 4) {
+				printf("runnn4!");
+				forward();
+				_delay_ms(150);
+			}
+			if (node == 3) {
+				printf("runnn3!");
+				right_turn_wls();
+				_delay_ms(50);
+			}
+			if (node == 2) {
+				printf("runnn2!");
+				right_turn_wls();
+				_delay_ms(50);
+			}
+			if (node == 1) {
+				printf("runnn1!");
+				right_turn_wls();
+				_delay_ms(50);
+			}
+			forward();
+			_delay_ms(150);
+		}
+		//case 7
+		if (left_sensor == 0 && centre_sensor == 0 && right_sensor == 0) {
+			stop();
+			printf("yes");
+			right_turn_wls();
+			_delay_ms(15);
+			forward();
+			_delay_ms(5);
+			right_turn_wls();
+			_delay_ms(15);
+			printf("test7!");
+		}
+		
+		//stop();
+		//_delay_ms(100);
+	}
+}
+/*
+*
+* Function Name: left_turn_wls
+* Input: void
+* Output: void
+* Logic: Uses white line sensors to turn left until black line is encountered
+* Example Call: left_turn_wls(); //Turns right until black line is encountered
+*
+*/
+void left_turn_wls(void)
+{
+	//stop();
+	left();
+	//soft_left();
+	//velocity(200, 250);
+	//_delay_ms(250);
+	//forward();
+}
+
+/*
+*
+* Function Name: right_turn_wls
+* Input: void
+* Output: void
+* Logic: Uses white line sensors to turn right until black line is encountered
+* Example Call: right_turn_wls(); //Turns right until black line is encountered
+*/
+void right_turn_wls(void)
+{	
+	//stop();
+	right();
+	//soft_right();
+	//velocity(250, 200);
+	//_delay_ms(250);
+	//forward();
+}
