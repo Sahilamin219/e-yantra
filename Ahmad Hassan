@@ -1,0 +1,122 @@
+//You are allowed to define your own function to fulfill the requirement of tasks
+//Dont change the name of following functions
+
+#include "CB_Task_1_Sandbox.h"
+
+/*
+*
+* Function Name: forward_wls
+* Input: node
+* Output: void
+* Logic: Uses white line sensors to go forward by the number of nodes specified
+* Example Call: forward_wls(2); //Goes forward by two nodes
+*
+*/
+void forward_wls(unsigned char node)
+{
+
+}
+/*
+*
+* Function Name: left_turn_wls
+* Input: void
+* Output: void
+* Logic: Uses white line sensors to turn left until black line is encountered
+* Example Call: left_turn_wls(); //Turns right until black line is encountered
+*
+*/
+void left_turn_wls(void)
+{
+
+}
+
+/*
+*
+* Function Name: right_turn_wls
+* Input: void
+* Output: void
+* Logic: Uses white line sensors to turn right until black line is encountered
+* Example Call: right_turn_wls(); //Turns right until black line is encountered
+*/
+void right_turn_wls(void)
+{
+
+}
+
+/*
+*
+* Function Name: e_shape
+* Input: void
+* Output: void
+* Logic: Use this function to make the robot trace a e shape path on the arena
+* Example Call: e_shape();
+*/
+void e_shape(void){
+	unsigned char ls = 1, cs = 1, rs = 1,fs = 1;
+	int a=0;
+	int count = 0;
+	while (a == 0) {
+		ls = ADC_Conversion(1);
+		cs = ADC_Conversion(2);
+		rs = ADC_Conversion(3);
+
+		if((ls==0 && rs==0 && cs==255)){
+			forward();
+		}else if (ls == 255 && rs == 0 && cs==255) {
+			velocity(25, 25);
+			soft_left();
+			printf("soft left");
+		}else if (ls == 255 && rs == 0 && cs == 0) {
+			velocity(25, 25);
+			soft_left();
+			printf("softright");
+
+		}else if (ls == 0 && rs == 255 && cs == 255) {
+			velocity(25, 25);
+			soft_right();
+			printf("softright");
+		}
+		else if (ls == 0 && rs == 255 && cs == 0) {
+			velocity(25, 25);
+			soft_right();
+		}
+		else if (ls == 255 && rs == 255 && cs == 255) {
+			stop();
+		}
+
+		printf("\n%d %d %d", ls, cs, rs);
+		
+		//if (rs != 0 && cs != 0 && ls != 0) { break; }
+
+		_delay_ms(100);
+		
+	}
+	printf("%d", count);
+}
+
+
+/*
+*
+* Function Name: Task_1_1
+* Input: void
+* Output: void
+* Logic: Use this function to encapsulate your Task 1.1 logic
+* Example Call: Task_1_1();
+*/
+void Task_1_1(void)
+{
+	// Write your task 1.1 Logic here
+}
+
+/*
+*
+* Function Name: Task_1_2
+* Input: void
+* Output: void
+* Logic: Use this function to encapsulate your Task 1.2 logic
+* Example Call: Task_1_2();
+*/
+void Task_1_2(void)
+{
+	//write your task 1.2 logic here
+}
