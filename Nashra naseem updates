@@ -1,0 +1,176 @@
+#include "CB_Task_1_Sandbox.h"
+
+
+/*
+*
+* Function Name: forward_wls
+* Input: node
+* Output: void
+* Logic: Uses white line sensors to go forward by the number of nodes specified
+* Example Call: forward_wls(2); //Goes forward by two nodes
+*
+*/
+void forward_wls(unsigned char node)
+{
+	int l, m, r;
+	l = ADC_Conversion(1);
+	m = ADC_Conversion(2);
+	r = ADC_Conversion(3);
+	while (1)
+	{
+		int l, m, r;
+		l = ADC_Conversion(1);
+		m = ADC_Conversion(2);
+		r = ADC_Conversion(3);
+		printf("%d %d %d \n", l, m, r);
+		{
+			if (m != 0 && l== 0 && r == 0)
+			{
+				forward();
+			}
+			else if (l != 0 && m == 0 && r == 0)
+			{
+			     velocity(100,255);
+			}
+			else if (l == 0 && m == 0 && r != 0)
+			{
+				 velocity(255,100);
+			}
+			else if (l != 0 && m != 0 && r == 0)
+			{
+			   velocity(100,255);
+			}
+			else if (l == 0 && m != 0 && r != 0)
+			{
+			velocity(255,100);
+			}
+		else if (l != 0 && m != 0 && r != 0)
+			{
+				forward();
+				_delay_ms(375);
+				break;
+
+
+			}
+			else
+			{
+				
+
+			}
+		}
+	}
+
+
+}
+/*
+*
+* Function Name: left_turn_wls
+* Input: void
+* Output: void
+* Logic: Uses white line sensors to turn left until black line is encountered
+* Example Call: left_turn_wls(); //Turns right until black line is encountered
+*
+*/
+void left_turn_wls(void)
+{
+
+}
+
+/*
+*
+* Function Name: right_turn_wls
+* Input: void
+* Output: void
+* Logic: Uses white line sensors to turn right until black line is encountered
+* Example Call: right_turn_wls(); //Turns right until black line is encountered
+*/
+void right_turn_wls(void)
+{
+
+}
+
+/*
+*
+* Function Name: e_shape
+* Input: void
+* Output: void
+* Logic: Use this function to make the robot trace a e shape path on the arena
+* Example Call: e_shape();
+*/
+void e_shape(void)
+{
+
+	forward_wls(1);
+	right();
+	_delay_ms(475);
+	forward_wls(1);
+	forward_wls(1);
+	right();
+	_delay_ms(475);
+	forward_wls(1);
+	right();
+	_delay_ms(475);
+	forward_wls(1);
+	right();
+	_delay_ms(475);
+	forward_wls(1);
+	
+	
+
+
+
+}
+
+
+/*
+*
+* Function Name: Task_1_1
+* Input: voidnt a, b, c;
+	a = ADC_Conversion(1);
+	b = ADC_Conversion(2);
+	c = ADC_Conversion(3);
+	while (1)
+	{
+		if (a == 0 && b != 0 && c == 0)
+		{
+			//std::cout << "Forward";
+			forward();
+		}
+		else
+		{
+			back();
+		}
+* Output: void
+* Logic: Use this function to encapsulate your Task 1.1 logic
+* Example Call: Task_1_1();
+*/
+void Task_1_1(void)
+{
+
+	forward_wls(1);
+	right();
+	_delay_ms(475);
+	forward_wls(1);
+	forward_wls(1);
+	forward_wls(1);
+	forward_wls(1);
+	velocity(100,255);
+	_delay_ms(475);
+	forward_wls(1);
+
+
+
+}
+
+/*
+*
+* Function Name: Task_1_2
+* Input: void
+* Output: void
+* Logic: Use this function to encapsulate your Task 1.2 logic
+* Example Call: Task_1_2();
+*/
+void Task_1_2(void)
+{
+	//write your task 1.2 logic here
+}
