@@ -12,9 +12,8 @@
 * Example Call: forward_wls(2); //Goes forward by two nodes
 *
 */
-void forward_wls(unsigned char node)
-{
-
+void forward_wls(unsigned char node){
+	
 }
 /*
 *
@@ -25,8 +24,7 @@ void forward_wls(unsigned char node)
 * Example Call: left_turn_wls(); //Turns right until black line is encountered
 *
 */
-void left_turn_wls(void)
-{
+void left_turn_wls(void){
 
 }
 
@@ -38,8 +36,7 @@ void left_turn_wls(void)
 * Logic: Uses white line sensors to turn right until black line is encountered
 * Example Call: right_turn_wls(); //Turns right until black line is encountered
 */
-void right_turn_wls(void)
-{
+void right_turn_wls(void){
 
 }
 
@@ -59,36 +56,34 @@ void e_shape(void){
 		ls = ADC_Conversion(1);
 		cs = ADC_Conversion(2);
 		rs = ADC_Conversion(3);
-
 		if((ls==0 && rs==0 && cs==255)){
 			forward();
 		}else if (ls == 255 && rs == 0 && cs==255) {
-			velocity(25, 25);
-			soft_left();
-			printf("soft left");
+			velocity(25, 50);
+			left();
+			printf("soft left1");
 		}else if (ls == 255 && rs == 0 && cs == 0) {
-			velocity(25, 25);
+			velocity(25, 50);
 			soft_left();
-			printf("softright");
-
+			printf("soft left2");
 		}else if (ls == 0 && rs == 255 && cs == 255) {
-			velocity(25, 25);
-			soft_right();
-			printf("softright");
+			velocity(50, 25);
+			right();
+			printf("soft right1");
 		}
 		else if (ls == 0 && rs == 255 && cs == 0) {
-			velocity(25, 25);
+			velocity(50, 25);
 			soft_right();
+			printf("soft right2");
 		}
 		else if (ls == 255 && rs == 255 && cs == 255) {
-			stop();
+			soft_right();
+			_delay_ms(50);
 		}
 
 		printf("\n%d %d %d", ls, cs, rs);
 		
 		//if (rs != 0 && cs != 0 && ls != 0) { break; }
-
-		_delay_ms(100);
 		
 	}
 	printf("%d", count);
