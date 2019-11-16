@@ -27,29 +27,23 @@ void forward_wls(unsigned char node) {
 			if (flag == 1) { isBotOnNode = 0; }
 		}
 		else if (ls == 255 && rs == 0 && cs == 255) {
-			//velocity(25, 50);
-
 			soft_left();
 			printf("soft left1");
 			if (flag == 1) { isBotOnNode = 0; }
 
 		}
 		else if (ls == 255 && rs == 0 && cs == 0) {
-			//velocity(25, 50);
 			soft_left();
 			if (flag == 1) { isBotOnNode = 0; }
 			printf("soft left2");
 		}
 		else if (ls == 0 && rs == 255 && cs == 255) {
-			//velocity(50, 25);
-
 			soft_right();
 			if (flag == 1) { isBotOnNode = 0; }
 			printf("soft right1");
 
 		}
 		else if (ls == 0 && rs == 255 && cs == 0) {
-			//velocity(50, 25);
 			soft_right();
 			if (flag == 1) { isBotOnNode = 0; }
 			printf("soft right2");
@@ -60,39 +54,13 @@ void forward_wls(unsigned char node) {
 		else if (ls == 0 && rs == 0 && cs == 0) {
 			flag = 0;
 			isBotOnNode = 0;
-
 		}
-		//if (tmp_node == 1 && (ls != 255 && rs != 255 && cs != 255)) { node_count++; }
 		if (isBotOnNode == 1 && flag == 0) { node_count++; flag = 1; }
 		printf("\n%d %d %d %d", ls, cs, rs, node_count);
 		if (node_count == node) { stop(); break; }
-		_delay_ms(1);
+		_delay_ms(10);
 	}
 }
-void e_shape(void) {
-	forward_wls(1);
-	right_turn_wls();
-	forward_wls(4);
-	left_turn_wls();
-	forward_wls(1);
-	left_turn_wls();
-	forward_wls(1);
-	right_turn_wls();
-	forward_wls(1);
-	left_turn_wls();
-	forward_wls(1);
-	right_turn_wls();
-	forward_wls(1);
-	left_turn_wls();
-	forward_wls(1);
-	right_turn_wls();
-	forward_wls(1);
-	left_turn_wls();
-	forward_wls(1);
-	right_turn_wls();
-
-}
-
 /*
 *
 * Function Name: left_turn_wls
@@ -103,10 +71,19 @@ void e_shape(void) {
 *
 */
 void left_turn_wls(void) {
-	soft_left();
-	_delay_ms(1000);
+	int a = 0;
+	unsigned char ls = 1, cs = 1, rs = 1, fs = 1;
+	while (a == 0) {
+		left();
+		velocity(100, 255);
+		ls = ADC_Conversion(1);
+		cs = ADC_Conversion(2);
+		rs = ADC_Conversion(3);
+		if (ls == 0 && cs == 255 && rs == 0) { break; }
+		//printf("\n%d %d %d 00000000000000000", ls, cs, rs);
+		_delay_ms(10);
+	}
 }
-
 /*
 *
 * Function Name: right_turn_wls
@@ -116,10 +93,118 @@ void left_turn_wls(void) {
 * Example Call: right_turn_wls(); //Turns right until black line is encountered
 */
 void right_turn_wls(void) {
-	soft_right();
-	_delay_ms(1000);
-}
+	int a = 0;
+	unsigned char ls = 1, cs = 1, rs = 1, fs = 1;
 
+	while (a == 0) {
+		right();
+		velocity(255, 100);
+		ls = ADC_Conversion(1);
+		cs = ADC_Conversion(2);
+		rs = ADC_Conversion(3);
+		if (ls == 0 && cs == 255 && rs == 0) { break; }
+		//printf("\n%d %d %d llllllllllllllllllll", ls, cs, rs);
+		_delay_ms(10);
+	}
+}
+/*
+*
+* Function Name: whiteLine
+* Input: void
+* Output: void
+* Logic: Uses white line sensors to go forward
+* Example Call: whiteLine(); //Goes forward on white line
+*
+*/
+void whiteLine() {
+	unsigned char ls = 1, cs = 1, rs = 1, fs = 1;
+	int a = 0;
+	while (a == 0) {
+		ls = ADC_Conversion(1);
+		cs = ADC_Conversion(2);
+		rs = ADC_Conversion(3);
+		if ((ls == 255 && rs == 255 && cs == 0)) {
+			forward();
+		}
+		else if (ls == 0 && rs == 255 && cs == 255) {
+			soft_left();
+			//printf("soft left2");
+		}
+		else if (ls == 255 && rs == 0 && cs == 255) {
+			soft_right();
+			//printf("soft right2");
+		}
+		else if (ls == 0 && rs == 0 && cs == 255) {
+			break;
+		}
+		_delay_ms(1);
+		//printf("\n%d %d %d", ls, cs, rs);
+	}
+}
+/*
+*
+* Function Name: zigZag
+* Input: void
+* Output: void
+* Logic: 
+* Example Call: zigZag(); //
+*
+*/
+void zigZag() {
+	unsigned char ls = 1, cs = 1, rs = 1, fs = 1;
+	int a = 0;
+	while (a == 0) {
+		ls = ADC_Conversion(1);
+		cs = ADC_Conversion(2);
+		rs = ADC_Conversion(3);
+		if ((ls == 0 && rs == 0 && cs == 255)) {
+			forward();
+		}
+		else if (ls == 255 && rs == 0 && cs == 255) {
+			soft_left();
+			printf("soft left1");
+		}
+		else if (ls == 255 && rs == 0 && cs == 0) {
+			soft_left();
+			printf("soft left2");
+		}
+		else if (ls == 0 && rs == 255 && cs == 255) {
+			soft_right();
+			printf("soft right1");
+		}
+		else if (ls == 0 && rs == 255 && cs == 0) {
+			soft_right();
+			printf("soft right2");
+		}else if (ls == 255 && rs == 255 && cs == 255) {
+			break;
+		}
+		_delay_ms(10);
+	}
+}
+/*
+*
+* Function Name: final_destination()
+* Input: void
+* Output: void
+* Logic:
+* Example Call: final_destination(); //
+*
+*/
+void final_destination() {
+	unsigned char ls = 1, cs = 1, rs = 1, fs = 1;
+	int a = 0;
+	while (a == 0) {
+		ls = ADC_Conversion(1);
+		cs = ADC_Conversion(2);
+		rs = ADC_Conversion(3);
+		if (ls == 255 && cs == 255 && rs == 255) {
+			printf("finalssssss;");
+			//stop();
+			break;
+		}
+		_delay_ms(10);
+	}
+}
 /*
 *
 * Function Name: e_shape
@@ -128,6 +213,9 @@ void right_turn_wls(void) {
 * Logic: Use this function to make the robot trace a e shape path on the arena
 * Example Call: e_shape();
 */
+void e_shape(void) {	
+}
+
 /*
 *
 * Function Name: Task_1_1
@@ -136,9 +224,37 @@ void right_turn_wls(void) {
 * Logic: Use this function to encapsulate your Task 1.1 logic
 * Example Call: Task_1_1();
 */
-void Task_1_1(void)
-{
-	// Write your task 1.1 Logic here
+void Task_1_1(void){
+	forward_wls(1);
+		right_turn_wls();
+	forward_wls(4);
+		left_turn_wls();
+	forward_wls(1);
+		left_turn_wls();
+	forward_wls(1);
+		right_turn_wls();
+	forward_wls(1);
+		left_turn_wls();
+	forward_wls(1);
+		right_turn_wls();
+	zigZag();
+		left_turn_wls();
+	forward_wls(1);
+		right_turn_wls();
+	forward_wls(1);
+		left_turn_wls();
+	forward_wls(1);
+
+
+		right_turn_wls();
+	forward_wls(1);
+	whiteLine();
+	forward_wls(1);
+		right_turn_wls();
+	forward_wls(1);
+		left_turn_wls();
+	forward_wls(1);
+	_delay_ms(600000);
 }
 
 /*
