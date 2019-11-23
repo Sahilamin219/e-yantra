@@ -11,7 +11,7 @@
 *
 */
 void forward_wls(unsigned char node) {
-	unsigned char ls = 1, cs = 1, rs = 1, fs = 1;
+	unsigned char ls = 1, cs = 1, rs = 1, fs = 1,ps=1;
 	int a = 0;
 	int flag = 0;
 	int node_count = 0;
@@ -22,6 +22,7 @@ void forward_wls(unsigned char node) {
 		ls = ADC_Conversion(1);
 		cs = ADC_Conversion(2);
 		rs = ADC_Conversion(3);
+		ps = ADC_Conversion(4);
 		if ((ls == 0 && rs == 0 && cs == 255)) {
 			forward();
 			if (flag == 1) { isBotOnNode = 0; }
@@ -56,7 +57,7 @@ void forward_wls(unsigned char node) {
 			isBotOnNode = 0;
 		}
 		if (isBotOnNode == 1 && flag == 0) { node_count++; flag = 1; }
-		printf("\n%d %d %d %d", ls, cs, rs, node_count);
+		printf("\n%d %d %d %d___%d__", ls, cs, rs, node_count,ps);
 		if (node_count == node) { stop(); break; }
 		_delay_ms(10);
 	}
@@ -72,15 +73,16 @@ void forward_wls(unsigned char node) {
 */
 void left_turn_wls(void) {
 	int a = 0;
-	unsigned char ls = 1, cs = 1, rs = 1, fs = 1;
+	unsigned char ls = 1, cs = 1, rs = 1, fs = 1, ps = 1;
 	while (a == 0) {
 		left();
 		velocity(100, 255);
 		ls = ADC_Conversion(1);
 		cs = ADC_Conversion(2);
 		rs = ADC_Conversion(3);
+		ps = ADC_Conversion(4);
 		if (ls == 0 && cs == 255 && rs == 0) { break; }
-		//printf("\n%d %d %d 00000000000000000", ls, cs, rs);
+		printf("\n%d %d %d___%d__", ls, cs, rs, ps);
 		_delay_ms(10);
 	}
 }
@@ -94,7 +96,7 @@ void left_turn_wls(void) {
 */
 void right_turn_wls(void) {
 	int a = 0;
-	unsigned char ls = 1, cs = 1, rs = 1, fs = 1;
+	unsigned char ls = 1, cs = 1, rs = 1, fs = 1, ps = 1;
 
 	while (a == 0) {
 		right();
@@ -102,8 +104,9 @@ void right_turn_wls(void) {
 		ls = ADC_Conversion(1);
 		cs = ADC_Conversion(2);
 		rs = ADC_Conversion(3);
+		ps = ADC_Conversion(4);
 		if (ls == 0 && cs == 255 && rs == 0) { break; }
-		//printf("\n%d %d %d llllllllllllllllllll", ls, cs, rs);
+		printf("\n%d %d %d___%d", ls, cs, rs, ps);
 		_delay_ms(10);
 	}
 }
@@ -254,7 +257,7 @@ void Task_1_1(void){
 	forward_wls(1);
 		left_turn_wls();
 	forward_wls(1);
-	_delay_ms(600000);
+	
 }
 
 /*
@@ -265,7 +268,23 @@ void Task_1_1(void){
 * Logic: Use this function to encapsulate your Task 1.2 logic
 * Example Call: Task_1_2();
 */
-void Task_1_2(void)
-{
+void Task_1_2(void){
+	forward_wls(1);
+		right_turn_wls();
+	forward_wls(1);
+		right_turn_wls();
+	forward_wls(1);
+		left_turn_wls();
+	forward_wls(1);
+		pick();
+		right_turn_wls();
+	forward_wls(1);
+		left_turn_wls();
+	forward_wls(1);
+		right_turn_wls();
+	forward_wls(2);
+		place();
+		stop();
+		_delay_ms(10000);
 	//write your task 1.2 logic here
 }
