@@ -1,0 +1,84 @@
+/*
+*
+* Function Name: proxi_forward
+* Input: void
+* Output: void
+* Logic: Uses proximity sensors to go forward
+* Example Call: proxi_forward(); //Goes forward using proximity sensor on any line
+*
+*/
+void proxi_forward(void) {
+	unsigned char ls = 1, cs = 1, rs = 1, fs = 1, psf = 1, psl = 1, psr = 1;
+	while (1) {
+		ls = ADC_Conversion(1);
+		cs = ADC_Conversion(2);
+		rs = ADC_Conversion(3);
+		//Channel for Proximity sensor
+		psf = ADC_Conversion(4);
+		psl = ADC_Conversion(5);
+		psr = ADC_Conversion(6); 
+		printf("\nstarts");
+
+		if((ls == 255 && rs == 255 && cs == 0)) {
+			forward();
+		}
+		else if (ls == 0 && rs == 255 && cs == 255) {
+			soft_left();
+		}
+		else if (ls == 255 && rs == 0 && cs == 255) {
+			soft_right();
+		}
+		else if ((ls == 0 && rs == 0 && cs == 255)) {
+			forward();
+		}
+		else if (ls == 255 && rs == 0 && cs == 255) {
+			soft_left();
+			printf("soft left1");
+		}
+		else if (ls == 255 && rs == 0 && cs == 0) {
+			soft_left();
+			printf("soft left2");
+		}
+		else if (ls == 0 && rs == 255 && cs == 255) {
+			soft_right();
+			printf("soft right1");
+
+		}
+		else if (ls == 0 && rs == 255 && cs == 0) {
+			soft_right();
+			printf("soft right2");
+		}
+		else if (ls == 0 && rs == 0 && cs == 0) {
+			if (psr > psl) {
+				printf("\n first if");
+				right();
+				_delay_ms(10);
+				forward();
+				_delay_ms(5);
+			}
+			else if (psr < psl) {
+				printf("\n second if");
+				left();
+				_delay_ms(10);
+				forward();
+				_delay_ms(5);
+			}
+			else if (psf < 32) {
+				printf("\n third if");
+				stop();
+			}
+			/*else if (psr == psl) {
+				printf("\n fourth if");
+				velocity(80, 80);
+				_delay_ms(10);
+			}*/
+		}
+		else if (ls == 255 && rs == 255 && cs == 255) {
+			break;
+		}
+		else {
+			continue;
+		}
+		_delay_ms(100);
+	}
+}
