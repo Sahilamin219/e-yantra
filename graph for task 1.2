@@ -1,0 +1,516 @@
+//You are allowed to define your own function to fulfill the requirement of tasks
+//Dont change the name of following functions
+#include "CB_Task_1_Sandbox.h"
+#include<vector> 
+#include<iostream>
+#include<queue>
+#include <list> 
+#include <limits>
+using namespace std;
+// iPair ==>  Integer Pair 
+typedef pair<int, int> iPair;
+/*
+*
+* Function Name: forward_wls
+* Input: node
+* Output: void
+* Logic: Uses white line sensors to go forward by the number of nodes specified
+* Example Call: forward_wls(2); //Goes forward by two nodes
+*
+*/
+
+void forward_wls(unsigned char node)
+{	
+	unsigned char ls = 1, cs = 1, rs = 1, fs = 1;	//intializing variables to get sensor reading
+	int flag = 0;	//a new variable to detect condition to call isBotOnNode variable
+	int node_count = 0;	//variable to count number of nodes on the path provided
+	int isBotOnNode = 0; // varible to detect is bot on linne or not 
+	while (1) {
+		//takinng input from sensors
+		ls = ADC_Conversion(1);
+		cs = ADC_Conversion(2);
+		rs = ADC_Conversion(3);
+		//condition to move forward
+		if ((ls == 0 && rs == 0 && cs == 255)) {
+			forward();
+			if (flag == 1) { isBotOnNode = 0; }
+		}
+		//condition to move soft left slightly
+		else if (ls == 255 && rs == 0 && cs == 255) {
+			soft_left();
+			printf("soft left1");
+			if (flag == 1) { isBotOnNode = 0; }
+
+		}
+		//condition to move soft left .
+		else if (ls == 255 && rs == 0 && cs == 0) {
+			soft_left();
+			if (flag == 1) { isBotOnNode = 0; }
+			printf("soft left2");
+		}
+		//condition to move soft right slightly
+		else if (ls == 0 && rs == 255 && cs == 255) {
+			soft_right();
+			if (flag == 1) { isBotOnNode = 0; }
+			printf("soft right1");
+
+		}
+		//condition to move soft right
+		else if (ls == 0 && rs == 255 && cs == 0) {
+			soft_right();
+			if (flag == 1) { isBotOnNode = 0; }
+			printf("soft right2");
+		}
+		//condition to detect wether bot is on node or not
+		else if (ls == 255 && rs == 255 && cs == 255) {
+			isBotOnNode = 1;
+		}
+		////condition to detect wether bot on wrong track or not
+		else if (ls == 0 && rs == 0 && cs == 0) {
+			flag = 0;
+			isBotOnNode = 0;
+		}
+		//condition to detect count number of nodes
+		if (isBotOnNode == 1 && flag == 0) { node_count++; flag = 1; }
+		printf("\n%d %d %d %d", ls, cs, rs, node_count);
+		if (node_count == node) { stop(); break; }
+		_delay_ms(10);
+	}
+}
+/*
+*
+* Function Name: left_turn_wls
+* Input: void
+* Output: void
+* Logic: Uses white line sensors to turn left until black line is encountered
+* Example Call: left_turn_wls(); //Turns right until black line is encountered
+*
+*/
+void left_turn_wls(void) {
+	unsigned char ls = 1, cs = 1, rs = 1, fs = 1;
+	while (1) {
+		//command to move left
+		left();
+		//takinng input from sensors
+		velocity(100, 255);
+		ls = ADC_Conversion(1);
+		cs = ADC_Conversion(2);
+		rs = ADC_Conversion(3);
+		if (ls == 0 && cs == 255 && rs == 0) { break; }
+		_delay_ms(10);
+	}
+}
+/*
+*
+* Function Name: right_turn_wls
+* Input: void
+* Output: void
+* Logic: Uses white line sensors to turn right until black line is encountered
+* Example Call: right_turn_wls(); //Turns right until black line is encountered
+*/
+void right_turn_wls(void) {
+	unsigned char ls = 1, cs = 1, rs = 1, fs = 1;
+	while (1) {
+		right();
+		velocity(255, 100);
+		//takinng input from sensors
+		ls = ADC_Conversion(1);
+		cs = ADC_Conversion(2);
+		rs = ADC_Conversion(3);
+		if (ls == 0 && cs == 255 && rs == 0) { break; }
+		_delay_ms(10);
+	}
+}
+/*
+*
+* Function Name: whiteLine
+* Input: void
+* Output: void
+* Logic: Uses white line sensors to go forward
+* Example Call: whiteLine(); //Goes forward on white line
+*
+*/
+void whiteLine() {
+	unsigned char ls = 1, cs = 1, rs = 1, fs = 1;
+	while (1) {
+		//takinng input from sensors
+		ls = ADC_Conversion(1);
+		cs = ADC_Conversion(2);
+		rs = ADC_Conversion(3);
+		if ((ls == 255 && rs == 255 && cs == 0)) {
+			forward();
+		}
+		else if (ls == 0 && rs == 255 && cs == 255) {
+			soft_left();
+		}
+		else if (ls == 255 && rs == 0 && cs == 255) {
+			soft_right();
+		}
+		else if (ls == 0 && rs == 0 && cs == 255) {
+			break;
+		}
+		_delay_ms(1);
+	}
+}
+/*
+*
+* Function Name: zigZag
+* Input: void
+* Output: void
+* Logic:
+* Example Call: zigZag(); //
+*
+*/
+void zigZag() {
+	unsigned char ls = 1, cs = 1, rs = 1, fs = 1;
+	while (1) {
+		//takinng input from sensors
+		ls = ADC_Conversion(1);
+		cs = ADC_Conversion(2);
+		rs = ADC_Conversion(3);
+		if ((ls == 0 && rs == 0 && cs == 255)) {
+			forward();
+		}
+		else if (ls == 255 && rs == 0 && cs == 255) {
+			soft_left();
+			printf("soft left1");
+		}
+		else if (ls == 255 && rs == 0 && cs == 0) {
+			soft_left();
+			printf("soft left2");
+		}
+		else if (ls == 0 && rs == 255 && cs == 255) {
+			soft_right();
+			printf("soft right1");
+		}
+		else if (ls == 0 && rs == 255 && cs == 0) {
+			soft_right();
+			printf("soft right2");
+		}
+		else if (ls == 255 && rs == 255 && cs == 255) {
+			break;
+		}
+		_delay_ms(10);
+	}
+}
+/*
+*
+* Function Name: final_destination()
+* Input: void
+* Output: void
+* Logic:
+* Example Call: final_destination(); //
+*
+*/
+/*
+*
+* Function Name: e_shape
+* Input: void
+* Output: void
+* Logic: Use this function to make the robot trace a e shape path on the arena
+* Example Call: e_shape();
+*/
+void e_shape(void) 
+{
+	forward_wls(1);
+	right_turn_wls();
+	forward_wls(2);
+	right_turn_wls();
+	forward_wls(1);
+	right_turn_wls();
+	forward_wls(1);
+	right_turn_wls();
+	forward_wls(1);
+	stop();  
+
+
+}
+
+/*
+*
+* Function Name: Task_1_1
+* Input: void
+* Output: void
+* Logic: Use this function to encapsulate your Task 1.1 logic
+* Example Call: Task_1_1();
+*/
+void Task_1_1(void) {
+	forward_wls(1);
+	right_turn_wls();
+	forward_wls(4);
+	left_turn_wls();
+	forward_wls(1);
+	left_turn_wls();
+	forward_wls(1);
+	right_turn_wls();
+	forward_wls(1);
+	left_turn_wls();
+	forward_wls(1);
+
+
+	right_turn_wls();
+	zigZag();
+	left_turn_wls();
+	forward_wls(1);
+	right_turn_wls();
+	forward_wls(1);
+	left_turn_wls();
+	forward_wls(1);
+
+
+	right_turn_wls();
+	forward_wls(1);
+	whiteLine();
+	forward_wls(1);
+	right_turn_wls();
+	forward_wls(1);
+	left_turn_wls();
+	forward_wls(1);
+	_delay_ms(600000);
+}
+
+/*
+*
+* Function Name: proxi_forward
+* Input: void
+* Output: void
+* Logic: Uses proximity sensors to go forward
+* Example Call: proxi_forward(); //Goes forward using proximity sensor on any line
+*
+*/
+void proxi_forward(void) {
+	unsigned char ls = 1, cs = 1, rs = 1, fs = 1, psf = 1, psl = 1, psr = 1;
+	while (1) {
+		//takinng input from sensors
+		ls = ADC_Conversion(1);
+		cs = ADC_Conversion(2);
+		rs = ADC_Conversion(3);
+		psf = ADC_Conversion(4);
+		psl = ADC_Conversion(5);
+		psr = ADC_Conversion(6); //Channel for Proximity sensor
+		printf("\nstarts");
+		if (psr > psl) {
+			printf("\n first if");
+			right();
+		}
+		else if (psr < psl) {
+			printf("\n second if");
+			left();
+		}
+		else if (psf < 32) {
+			printf("\n third if");
+			stop();
+		}
+		else if (psr == psl) {
+			printf("\n fourth if");
+			velocity(100, 100);
+			forward();
+			_delay_ms(10);
+		}
+		else if ((ls == 255 && rs == 255 && cs == 0)) {
+			forward();
+		}
+		else if (ls == 0 && rs == 255 && cs == 255) {
+			soft_left();
+		}
+		else if (ls == 255 && rs == 0 && cs == 255) {
+			soft_right();
+		}
+		else if ((ls == 0 && rs == 0 && cs == 255)) {
+			forward();
+		}
+		else if (ls == 255 && rs == 0 && cs == 255) {
+			soft_left();
+			printf("soft left1");
+		}
+		else if (ls == 255 && rs == 0 && cs == 0) {
+			soft_left();
+			printf("soft left2");
+		}
+		else if (ls == 0 && rs == 255 && cs == 255) {
+			soft_right();
+			printf("soft right1");
+
+		}
+		else if (ls == 0 && rs == 255 && cs == 0) {
+			soft_right();
+			printf("soft right2");
+		}
+		else {
+			continue;
+		}
+		_delay_ms(100);
+	}
+}
+
+/*
+*
+* Function Name: Task_1_2
+* Input: void
+* Output: void
+* Logic: Use this function to encapsulate your Task 1.2 logic
+* Example Call: Task_1_2();
+*/
+void Task_1_2(void)
+{
+	
+	//write your task 1.2 logic here
+	forward_wls(1);
+	right_turn_wls();
+	forward_wls(1);
+	right_turn_wls();
+	forward_wls(1);
+	left_turn_wls();
+	forward_wls(1);
+	pick();
+	right_turn_wls();
+	forward_wls(1);
+	left_turn_wls();
+	forward_wls(1);
+	right_turn_wls();
+	proxi_forward();
+	forward_wls(2);
+	place();
+	stop();
+	_delay_ms(10000);
+}
+
+// This class represents a directed graph using 
+// adjacency list representation 
+class Graph
+{
+	int V; // No. of vertices 
+
+	// In a weighted graph, we need to store vertex 
+	// and weight pair for every edge 
+	list< pair<int, int> >* adj;
+
+public:
+	Graph(int V); // Constructor 
+
+	// function to add an edge to graph 
+	void addEdge(int u, int v, int w);
+
+	// prints shortest path from s 
+	void shortestPath(int s);
+};
+
+// Allocates memory for adjacency list 
+Graph::Graph(int V)
+{
+	this->V = V;
+	adj = new list<iPair>[V];
+}
+
+void Graph::addEdge(int u, int v, int w)
+{
+	adj[u].push_back(make_pair(v, w));
+	adj[v].push_back(make_pair(u, w));
+}
+
+// Prints shortest paths from src to all other vertices 
+void Graph::shortestPath(int src)
+{
+	
+	priority_queue< iPair, vector <iPair>, greater<iPair> > pq;
+
+	// Create a vector for distances and initialize all 
+	// distances as infinite (INF) 
+	vector<int> dist(V, std::numeric_limits<int>::max());
+	// Insert source itself in priority queue and initialize 
+	// its distance as 0. 
+	pq.push(make_pair(0, src));
+	dist[src] = 0;
+
+	/* Looping till priority queue becomes empty (or all
+	distances are not finalized) */
+	while (!pq.empty())
+	{
+		// The first vertex in pair is the minimum distance 
+		// vertex, extract it from priority queue. 
+		// vertex label is stored in second of pair (it 
+		// has to be done this way to keep the vertices 
+		// sorted distance (distance must be first item 
+		// in pair) 
+		int u = pq.top().second;
+		pq.pop();
+
+		// 'i' is used to get all adjacent vertices of a vertex 
+		list< pair<int, int> >::iterator i;
+		for (i = adj[u].begin(); i != adj[u].end(); ++i)
+		{
+			// Get vertex label and weight of current adjacent 
+			// of u. 
+			int v = (*i).first;
+			int weight = (*i).second;
+
+			// If there is shorted path to v through u. 
+			if (dist[v] > dist[u] + weight)
+			{
+				// Updating distance of v 
+				dist[v] = dist[u] + weight;
+				pq.push(make_pair(dist[v], v));
+			}
+		}
+	}
+
+	// Print shortest distances stored in dist[] 
+	printf("Vertex Distance from Source\n");
+	for (int i = 0; i < V; ++i)
+		printf("%d \t\t %d\n", i, dist[i]);
+}
+
+void addEdge(vector<int> adj[], int u, int v)
+{
+	adj[u].push_back(v);
+	adj[v].push_back(u);
+}
+
+int graph(int array[34][34], int u, int v, int w)
+{
+
+	int V = 49;
+	int map[7][7] = {
+		{0,30,0,0,0,29,0},
+		{28,27,36,0,0,25,24},
+		{23,22,0,0,0,21,20},
+		{19,18,17,0,16,15,14},
+		{13,12,0,0,0,11,10},
+		{9,8,7,0,6,5,4},
+		{0,3,0,2,0,1,0},
+	};
+	vector<int> adj[49];
+	addEdge(adj, 1, 2);
+	addEdge(adj, 2, 3);
+	addEdge(adj, 3, 8);
+	addEdge(adj, 8, 12);
+	addEdge(adj, 12, 18);
+	addEdge(adj, 18, 22);
+	addEdge(adj, 22, 27);
+	addEdge(adj, 27, 30);
+	addEdge(adj, 30, 29);
+	addEdge(adj, 29, 25);
+	addEdge(adj, 25, 21);
+	addEdge(adj, 21, 15);
+	addEdge(adj, 15, 11);
+	addEdge(adj, 11, 5);
+	addEdge(adj, 5, 1);
+	addEdge(adj, 8, 9);
+	addEdge(adj, 8, 7);
+	addEdge(adj, 12, 13);
+	addEdge(adj, 18, 19);
+	addEdge(adj, 19, 17);
+	addEdge(adj, 22, 23);
+	addEdge(adj, 27, 28);
+	addEdge(adj, 27, 26);
+	addEdge(adj, 30, 29);
+	addEdge(adj, 25, 24);
+	addEdge(adj, 21, 20);
+	addEdge(adj, 15, 14);
+	addEdge(adj, 15, 16);
+	addEdge(adj, 11, 10);
+	addEdge(adj, 5, 6);
+	addEdge(adj, 5, 4);
+	addEdge(adj, 12, 11);
+	addEdge(adj, 22, 21);
+}
