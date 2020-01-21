@@ -28,7 +28,7 @@ private:
 	};
 
 	sNode *nodes = nullptr;
-	int nMapWidth = 16;
+	int nMapWidth = 16;//this is because if pixeles size
 	int nMapHeight = 16;
 
 	sNode *nodeStart = nullptr;
