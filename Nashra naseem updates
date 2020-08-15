@@ -1,6 +1,3 @@
-//Dont change the name of following functions
-
-
 #include "CB_Task_1_Sandbox.h"
 
 
@@ -15,54 +12,50 @@
 */
 void forward_wls(unsigned char node)
 {
-	int n;n = node;
 	int l, m, r;
 	l = ADC_Conversion(1);
 	m = ADC_Conversion(2);
 	r = ADC_Conversion(3);
-	for(int i=0;i<n;i++)
-	{ 
-		while (1)
+	while (1)
+	{
+		int l, m, r;
+		l = ADC_Conversion(1);
+		m = ADC_Conversion(2);
+		r = ADC_Conversion(3);
+		printf("%d %d %d \n", l, m, r);
 		{
-
-			l = ADC_Conversion(1);
-			m = ADC_Conversion(2);
-			r = ADC_Conversion(3);
-			printf("%d %d %d \n", l, m, r);
+			if (m != 0 && l== 0 && r == 0)
 			{
-				if (m != 0 && l == 0 && r == 0)
-				{
-					forward();
-				}
-				else if (l != 0 && m == 0 && r == 0)
-				{
-					velocity(150, 255);
-				}
-				else if (l == 0 && m == 0 && r != 0)
-				{
-					velocity(255, 150);
-				}
-				else if (l != 0 && m != 0 && r == 0)
-				{
-					velocity(150, 255);
-				}
-				else if (l == 0 && m != 0 && r != 0)
-				{
-					velocity(255, 150);
-				}
-				else if (l != 0 && m != 0 && r != 0)
-				{
-					forward();
-					_delay_ms(175);
-					break;
+				forward();
+			}
+			else if (l != 0 && m == 0 && r == 0)
+			{
+			     velocity(100,255);
+			}
+			else if (l == 0 && m == 0 && r != 0)
+			{
+				 velocity(255,100);
+			}
+			else if (l != 0 && m != 0 && r == 0)
+			{
+			   velocity(100,255);
+			}
+			else if (l == 0 && m != 0 && r != 0)
+			{
+			velocity(255,100);
+			}
+		else if (l != 0 && m != 0 && r != 0)
+			{
+				forward();
+				_delay_ms(375);
+				break;
 
 
-				}
-				else
-				{
+			}
+			else
+			{
+				
 
-
-				}
 			}
 		}
 	}
@@ -80,33 +73,7 @@ void forward_wls(unsigned char node)
 */
 void left_turn_wls(void)
 {
-	int l, m, r;
-	l = ADC_Conversion(1);
-	m = ADC_Conversion(2);
-	r = ADC_Conversion(3);
-	while (1)
-	{
-		printf("nash");
-		l = ADC_Conversion(1);
-		m = ADC_Conversion(2);
-		r = ADC_Conversion(3);
-		printf("%d %d %d", l, m, r);
-		if ((l != 0 && m != 0 && r == 0) || (l != 0 && m == 0 && r == 0) || (l == 0 && m == 0 && r == 0))
-		{
-			left();
 
-		}
-		else if(m!=0&&l==0&&r==0)
-		{
-			stop();
-			break;
-		}
-		else
-		{
-
-		}
-
-	}
 }
 
 /*
@@ -119,29 +86,7 @@ void left_turn_wls(void)
 */
 void right_turn_wls(void)
 {
-	int l, m, r;
-	l = ADC_Conversion(1);
-	m = ADC_Conversion(2);
-	r = ADC_Conversion(3);
-	while (1)
-	{
-		l = ADC_Conversion(1);
-		m = ADC_Conversion(2);
-		r = ADC_Conversion(3);
-		if ((l == 0 && r == 0 && m == 0)||(l==0&&m==0&&r!=0)||(l==0&&m!=0&&r!=0))
-		{
-			right();
-		}
-		else if(l==0&&m!=0&&r==0)
-		{
-			stop();
-			break;
-		}
-		else
-		{
 
-		}
-	}
 }
 
 /*
@@ -156,13 +101,18 @@ void e_shape(void)
 {
 
 	forward_wls(1);
-     right_turn_wls();
-	forward_wls(2);
-	right_turn_wls();
+	right();
+	_delay_ms(475);
 	forward_wls(1);
-	right_turn_wls();
 	forward_wls(1);
-	right_turn_wls();
+	right();
+	_delay_ms(475);
+	forward_wls(1);
+	right();
+	_delay_ms(475);
+	forward_wls(1);
+	right();
+	_delay_ms(475);
 	forward_wls(1);
 	
 	
@@ -198,17 +148,14 @@ void Task_1_1(void)
 {
 
 	forward_wls(1);
-	right_turn_wls();
-	forward_wls(4);
-	left_turn_wls();
+	right();
+	_delay_ms(475);
 	forward_wls(1);
-	left_turn_wls();
 	forward_wls(1);
-	left_turn_wls();
 	forward_wls(1);
 	forward_wls(1);
 	velocity(100,255);
-	_delay_ms(500);
+	_delay_ms(475);
 	forward_wls(1);
 
 
@@ -226,3 +173,4 @@ void Task_1_1(void)
 void Task_1_2(void)
 {
 	//write your task 1.2 logic here
+}
